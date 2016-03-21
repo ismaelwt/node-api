@@ -73,19 +73,29 @@ var users = User.find(function(err, users) {
 });
 
 
-app.get('/get-recipes', function(req, res){
-	if(req.query){
-		console.log(req.query);
-	}
-
+app.get('/get-recipes/:id', function(req, res){
+	
 var Ingredients = mongoose.model('ingredients', require(__dirname + '/ingredient'));
 
+	if(req.params.id){
+		//console.log(req.query);
 
-var ingredients = Ingredients.find(function(err, ingredients) {
-		if (err) throw err;
-		res.send(ingredients);
+		var ingredients = Ingredients.find({_id: req.params.id}, function(err, ingredients) {
+			if (err) throw err;
+			res.send(ingredients[0]);
+		});
+	}
 });
+
+
+app.get('/get-recipes', function(req, res){
 	
+var Ingredients = mongoose.model('ingredients', require(__dirname + '/ingredient'));
+
+	var ingredients = Ingredients.find(function(err, ingredients) {
+			if (err) throw err;
+			res.send(ingredients);
+		});
 });
 
 app.post('/login', function(req, res){
@@ -107,6 +117,24 @@ app.post('/login', function(req, res){
 
 });
 
+
+app.delete('/delete/:id', function(req, res){
+	var Ingredients = mongoose.model('ingredients', require(__dirname + '/ingredient'));
+
+	if(req.params.id){
+		//console.log(req.query);
+
+		Ingredients.findOneAndRemove({_id: req.params.id}, function(err){
+			if(err) throw err;
+			//res.status(200).send('successfully!');
+			Ingredients.find(function(err, ingredients) {
+				if (err) throw err;
+				res.send(ingredients);
+			});
+		});
+	}
+
+});
 
 app.post('/cadastrar-receita', function(req, res){
 

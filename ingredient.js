@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var ingredientsSchema = new Schema({
   description:{ type: String, required: true },
   ingredients: { type: String, required: true },
+  image:String,
   dateCreation: Date,
   dateUpdate: Date
 });
